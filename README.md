@@ -312,5 +312,123 @@ int Text::SumOfSquares(const std::string& filename) {
 ```
 
 # Тестирование
+<img width="257" height="91" alt="image" src="https://github.com/user-attachments/assets/b179b033-325a-48b7-9238-492a34de2f9d" />
 
+# Задание 5
+Для текстового файла, содержащего целые числа по несколько в строке, вычислить произведение всех чисел.
+
+1. Заполнить файл числами по несколько в строке.
+2. Читать файл построчно через std::getline.
+3. Использовать std::istringstream для разбора строки.
+4. Перемножать все числа.
+
+Реализация
+
+```cpp
+bool Text::FillFileMultiple(const std::string& filename, int lines, int numbers_per_line) {
+  if (lines <= 0 || numbers_per_line <= 0) {
+    std::cerr << "Неправильные параметры для заполнения файла.\n";
+    return false;
+  }
+
+  std::ofstream out(filename);
+  if (!out) {
+    std::cerr << "Не удалось открыть файл для записи.\n";
+    return false;
+  }
+
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<> dis(-50, 50);
+
+  for (int i = 0; i < lines; ++i) {
+    for (int j = 0; j < numbers_per_line; ++j) {
+      int number = dis(gen);
+      out << number;
+      if (j != numbers_per_line - 1) {
+        out << " ";
+      }
+    }
+    out << "\n";
+  }
+
+  out.close();
+  return true;
+}
+
+long long Text::ProductOfElements(const std::string& filename) {
+  std::ifstream in(filename);
+  if (!in) {
+    std::cerr << "Не удалось открыть файл для чтения.\n";
+    return 0;
+  }
+
+  long long product = 1;
+  std::string line;
+  while (std::getline(in, line)) {
+    std::istringstream iss(line);
+    int number = 0;
+    while (iss >> number) {
+      product *= number;
+    }
+  }
+
+  in.close();
+  return product;
+}
+```
+
+# Тестирование
+<img width="293" height="159" alt="image" src="https://github.com/user-attachments/assets/f2127a19-d569-4efd-87a1-b26edcde2cee" />
+
+# Задание 6
+Переписать в другой файл строки, длина которых равна заданному числу m.
+
+1. Открыть исходный файл для чтения и целевой для записи.
+2. Читать файл построчно через std::getline.
+3. Проверять длину каждой строки.
+4. Если длина равна m, записывать в выходной файл.
+
+Реализация
+
+```cpp
+bool Text::CopyLinesWithLength(const std::string& input_filename,
+                                const std::string& output_filename,
+                                size_t m) {
+  if (m == 0) {
+    std::cerr << "Длина строки должна быть больше нуля.\n";
+    return false;
+  }
+
+  std::ifstream in(input_filename);
+  if (!in) {
+    std::cerr << "Не удалось открыть исходный файл для чтения.\n";
+    return false;
+  }
+
+  std::ofstream out(output_filename);
+  if (!out) {
+    std::cerr << "Не удалось открыть файл для записи.\n";
+    in.close();
+    return false;
+  }
+
+  std::string line;
+  while (std::getline(in, line)) {
+    if (line.length() == m) {
+      out << line << "\n";
+    }
+  }
+
+  in.close();
+  out.close();
+  return true;
+}
+```
+
+
+# Тестирование
+<img width="152" height="176" alt="image" src="https://github.com/user-attachments/assets/ef4723d9-0fb2-47b6-b19c-40b6b3c66db9" />
+<img width="275" height="86" alt="image" src="https://github.com/user-attachments/assets/90b8e71c-ee7b-4a74-8002-56b8f71aea91" />
+<img width="143" height="132" alt="image" src="https://github.com/user-attachments/assets/eee7bd71-7559-437e-9997-024586a4870f" />
 
